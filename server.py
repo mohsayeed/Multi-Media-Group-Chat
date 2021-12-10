@@ -23,9 +23,9 @@ def receive_and_print(i,t):
 	while True:
 		msg = clients[i].recv(1024)
 		msg = msg.decode("utf-8")
-		if(msg==Send_string):
-			print(msg)
-			file = open(("data/_ss_"+str(i)+".jpg"),"wb")
+		if(msg.find(Send_string)!=-1):
+			x = msg.split(" ")
+			file = open(("server/"+x[1]),"wb")
 			condition = True
 			while condition:
 				image = clients[i].recv(SIZE)
@@ -38,7 +38,7 @@ def receive_and_print(i,t):
 			for j in range(noOfClientsArrived):
 				if (i!=j):
 					clients[j].send(bytes(msg, "utf-8"))
-					file = open(("data/_ss_"+str(i)+".jpg"),"rb")
+					file = open(("server/"+x[1]),"rb")
 					data = file.read(SIZE)
 					while data:
 						clients[j].send(data)
