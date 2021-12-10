@@ -8,7 +8,7 @@ hostName = socket.gethostname()
 host_ip_addrss= socket.gethostbyname(hostName)
 print(host_ip_addrss)
 port = 1024
-serverSocket.bind((hostName, port))
+serverSocket.bind((host_ip_addrss, port))
 
 print("Hostname of server socket : " + hostName)
 serverSocket.listen()
@@ -61,6 +61,7 @@ for i in range(noOfClients):
 	client, addr = serverSocket.accept()
 	clients.append(client)
 	clientAddresses.append(addr)
+	print("one client added")
 	noOfClientsArrived += 1
 	threads.append(threading.Thread(target=receive_and_print,args=(i,6556)))
 	threads[i].daemon = True
