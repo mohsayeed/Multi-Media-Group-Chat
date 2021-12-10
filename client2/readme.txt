@@ -1,0 +1,1 @@
+This is the data storage of client2
