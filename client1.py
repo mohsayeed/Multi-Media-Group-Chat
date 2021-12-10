@@ -11,7 +11,7 @@ def receive_and_print():
 		message = message.decode("utf-8")
 		if(message=="FILESEND"):
 			print(message)
-			file = open(("_ss_"+"client1"+".jpg"),"wb")
+			file = open(("client1/_ss_"+"client1"+".jpg"),"wb")
 			condition = True
 			while condition:
 				image = clientSocket_1.recv(SIZE)
@@ -31,7 +31,6 @@ while True:
 	req = input()
 	if (req.count("FILESEND")>0):
 		clientSocket_1.send(bytes(req,"utf-8"))
-		print("tureasdjlfljksfdalkjfdsal;adfsl;k")
 		file = open("data/ss.jpg","rb")
 		data = file.read(SIZE)
 		while data:

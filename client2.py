@@ -12,7 +12,7 @@ def receive_and_print():
 		message = message.decode("utf-8")
 		if(message=="FILESEND"):
 			print(message)
-			file = open(("_ss_"+"client2"+".jpg"),"wb")
+			file = open(("client2/_ss_"+"client2"+".jpg"),"wb")
 			condition = True
 			while condition:
 				image = clientSocket_2.recv(SIZE)
