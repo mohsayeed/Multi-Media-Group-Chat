@@ -3,7 +3,8 @@ import sys
 import threading
 
 clientSocket_1 = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-clientSocket_1.connect((socket.gethostname(), 1024))
+hostIpAddr = input("Please Give the Ip Address")
+clientSocket_1.connect((hostIpAddr, 1024))
 SIZE=1024
 Send_string = "FILESEND"
 

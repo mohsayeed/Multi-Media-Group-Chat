@@ -5,6 +5,8 @@ SIZE = 1024
 
 serverSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 hostName = socket.gethostname()
+host_ip_addrss= socket.gethostbyname(hostName)
+print(host_ip_addrss)
 port = 1024
 serverSocket.bind((hostName, port))
 
