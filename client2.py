@@ -2,8 +2,9 @@ import socket
 import sys
 import threading
 
-Send_string="FILESEND"
-SIZE = 1024
+from commands import SEND_STRING, SIZE
+
+
 clientSocket_2 = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 clientSocket_2.connect((socket.gethostname(), 1024))
 
@@ -12,7 +13,7 @@ def receive_and_print():
 	while True:
 		message = clientSocket_2.recv(1024)
 		message = message.decode("utf-8")
-		if(message.find(Send_string)!=-1):
+		if(message.find(SEND_STRING)!=-1):
 			print(message)
 			x=message.split(" ")
 			file = open(("client2/"+x[1]),"wb")

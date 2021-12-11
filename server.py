@@ -1,7 +1,9 @@
 import socket
 import sys
 import threading
-SIZE = 1024
+
+from commands import SEND_STRING, SIZE
+
 
 serverSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 hostName = socket.gethostname()
@@ -18,14 +20,13 @@ clients = []
 noOfClientsArrived = 0
 clientAddresses = []
 threads = []
-Send_string = "FILESEND"
 
 
 def receive_and_print(i,t):
 	while True:
 		msg = clients[i].recv(1024)
 		msg = msg.decode("utf-8")
-		if(msg.find(Send_string)!=-1):
+		if(msg.find(SEND_STRING)!=-1):
 			x = msg.split(" ")
 			file = open(("server/"+x[1]),"wb")
 			condition = True
