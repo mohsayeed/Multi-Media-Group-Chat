@@ -3,7 +3,7 @@ import sys
 import threading
 
 from commands import SEND_STRING, SIZE
-
+from math import ceil
 
 clientSocket_1 = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 clientSocket_1.connect((socket.gethostname(), 1024))
@@ -32,7 +32,7 @@ background_thread.daemon = True
 background_thread.start()
 
 while True:
-	req = input()
+	req = input-()
 	if (req.count("FILESEND")>0):
 		clientSocket_1.send(bytes(req,"utf-8"))
 		x = req.split(" ")
