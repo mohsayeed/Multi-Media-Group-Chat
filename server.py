@@ -9,6 +9,7 @@ hostName = socket.gethostname()
 host_ip_addrss= socket.gethostbyname(hostName)
 print("Server IP Address : " + host_ip_addrss)
 port = 1024
+print("Server Connected")
 serverSocket.bind((host_ip_addrss, port))
 
 print("Hostname of server socket : " + hostName)
@@ -18,6 +19,7 @@ noOfClients = 3
 clients = []
 noOfClientsArrived = 0
 clientAddresses = []
+active = []
 clientNames = []
 threads = []
 Send_string = "FILESEND"
@@ -28,7 +30,21 @@ def receiveAndSendMsg ( i,t ):
 		msg = clients[i].recv(1024)
 		msg = msg.decode("utf-8")
 
-		if (msg.find(Send_string) != -1):
+		if (msg.find("QUIT") != -1):
+			active[i] = False
+			clients[i].close()
+			break
+
+		elif (msg.find("MEMBERS ONLINE") != -1):
+			activeList = "ACTIVE MEMBERS : \n"
+			for j in range (noOfClientsArrived):
+				if ( i != j and active[j] == True):
+					activeList += clientNames[j] + " , " + "\n"
+
+			clients[i].send(bytes(activeList, "utf-8"))
+
+
+		elif (msg.find(Send_string) != -1):
 			x = msg.split(" ")
 			file = open(("server/"+x[1]),"wb")
 			condition = True
@@ -41,7 +57,7 @@ def receiveAndSendMsg ( i,t ):
 			file.close()
 
 			for j in range(noOfClientsArrived):
-				if (i!=j):
+				if (i!=j and active[j] == True):
 
 					clients[j].send(bytes(msg, "utf-8"))
 					file = open(("server/"+x[1]),"rb")
@@ -55,7 +71,7 @@ def receiveAndSendMsg ( i,t ):
 		else:
 			msg = ("{} : ").format(clientNames[i]) + msg
 			for j in range (noOfClientsArrived):
-				if ( i != j ):
+				if ( i != j and active[j] == True ):
 					clients[j].send(bytes(msg, "utf-8"))
 
 
@@ -64,10 +80,11 @@ for i in range(noOfClients):
 	clients.append(client)
 	clientAddresses.append(addr)
 	clientNames.append(client.recv(SIZE).decode("utf-8"))
-	
+	active.append(True)
+
 	noOfClientsArrived += 1
 	for j in range(noOfClientsArrived):
-		if ( i != j ):
+		if ( i != j and active[j] == True):
 			clients[j].send(bytes(clientNames[-1] + " has been added to the Chat", "utf-8"))
 	
 	threads.append(threading.Thread(target=receiveAndSendMsg,args=(i,6556)))

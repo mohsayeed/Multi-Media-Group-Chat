@@ -6,8 +6,10 @@ import tkinter
 clientSocket_1 = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 hostIpAddr = input("Please Provide the Server IP Address : ")
 clientSocket_1.connect((hostIpAddr, 1024))
+print("Connected to Server")
 clientName = input("Please enter your Name : ")
 clientSocket_1.send(bytes(clientName,"utf-8"))
+print("Transfering you to Chat Room....")
 SIZE=1024
 Send_string = "FILESEND"
 
@@ -17,7 +19,10 @@ def receiveMsg ( msgList ):
 		message = clientSocket_1.recv(1024)
 		message = message.decode("utf-8")
 
-		if ( message.find("has been added to the Chat") != -1 ):
+		if ( message.find("ACTIVE MEMBERS") != -1 ):
+			msgList.insert(tkinter.END,message)
+
+		elif ( message.find("has been added to the Chat") != -1 ):
 			msgList.insert(tkinter.END,'                                {}'.format(message))
 
 		elif (message.find(Send_string)!=-1):
@@ -43,7 +48,12 @@ def sendMsg ( textInput, msgList, clientSocket_1 ):
 
 	msgList.insert(tkinter.END,"You : " + req)
 
-	if (req.count("FILESEND")>0):
+	if ( req.find("QUIT") != -1 ):
+		clientSocket_1.send(bytes(req,"utf-8"))
+		msgList.insert(tkinter.END,'You have left the chat')
+		sys.exit()
+
+	elif (req.count("FILESEND")>0):
 		clientSocket_1.send(bytes(req,"utf-8"))
 		x = req.split(" ")
 		file = open("data/"+x[1],"rb")
@@ -99,8 +109,6 @@ recvThread = threading.Thread(target=receiveMsg, args=(msgList,))
 recvThread.daemon = True
 recvThread.start()
 
+msgList.insert(tkinter.END,"                Welcome to the Chat Room !!")
+
 chatWindow.mainloop()
-
-clientSocket_1.send(bytes(clientName + " left the Chat", "utf-8"))
-
-clientSocket_1.close()
